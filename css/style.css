@@ -1,0 +1,956 @@
+/* ==================================================
+   PetApp6 - 癒しウサギの日記帳
+   css/style.css
+
+   既存 UI を維持しながら、以下を追加
+   ・日記一覧の反応サムネール
+   ・日記詳細の反応画像
+   ・日記の編集・追記フォーム
+   ・編集、削除、戻るボタン
+   ================================================== */
+
+/* ---------- 基本設定 ---------- */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    min-height: 100%;
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    padding: 40px 20px;
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    background-color: #f7f9fc;
+    color: #51463f;
+
+    font-family:
+        "Yu Gothic",
+        "Hiragino Kaku Gothic ProN",
+        Meiryo,
+        sans-serif;
+
+    line-height: 1.7;
+}
+
+/* ---------- アプリ全体 ---------- */
+
+#app-container {
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+/* ---------- アプリタイトル ---------- */
+
+.app-header {
+    margin: 0 0 28px;
+    text-align: center;
+}
+
+.app-header h1 {
+    margin: 0;
+
+    color: #795548;
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 1.5;
+}
+
+/* ---------- 見出し ---------- */
+
+h2 {
+    margin: 0 0 18px;
+
+    color: #795548;
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+/* ---------- 共通ボタン ---------- */
+
+button {
+    min-height: 42px;
+    padding: 9px 18px;
+
+    border: none;
+    border-radius: 10px;
+
+    background-color: #8d6e63;
+    color: #ffffff;
+
+    font: inherit;
+    font-size: 0.95rem;
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.15s ease,
+        box-shadow 0.2s ease;
+}
+
+button:hover {
+    background-color: #6d5147;
+    box-shadow: 0 3px 8px rgb(70 50 40 / 12%);
+}
+
+button:active {
+    transform: translateY(1px);
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+a:focus-visible {
+    outline: 3px solid #90caf9;
+    outline-offset: 3px;
+}
+
+/* ---------- 入力欄共通 ---------- */
+
+input,
+textarea {
+    width: 100%;
+    padding: 12px 14px;
+
+    border: 1px solid #d8cec8;
+    border-radius: 10px;
+
+    background-color: #ffffff;
+    color: #51463f;
+
+    font: inherit;
+    font-size: 1rem;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #a59a94;
+}
+
+textarea {
+    display: block;
+    min-height: 150px;
+    resize: vertical;
+    line-height: 1.8;
+}
+
+/* ==================================================
+   PetApp5 継承部分：Direct Talk
+   ================================================== */
+
+#speech-section {
+    margin-bottom: 24px;
+    padding: 20px;
+
+    border: 1px solid #eee5df;
+    border-radius: 16px;
+
+    background-color: #ffffff;
+    box-shadow: 0 3px 12px rgb(70 50 40 / 5%);
+}
+
+/* ペット名の設定 */
+
+#petname-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#petname-input {
+    flex: 1;
+    min-width: 0;
+}
+
+#petname-save {
+    flex-shrink: 0;
+}
+
+/* 音声入力 */
+
+#talk-hint {
+    margin: 16px 0 8px;
+    text-align: center;
+}
+
+#start-voice {
+    min-width: 150px;
+}
+
+#speech-result {
+    min-height: 1.5em;
+    margin-top: 10px;
+
+    color: #75665e;
+    font-size: 0.9rem;
+
+    overflow-wrap: anywhere;
+}
+
+/* ==================================================
+   PetApp5 継承部分：うさぎの表示
+   ================================================== */
+
+#rabbit-section {
+    margin-bottom: 28px;
+}
+
+#rabbit-area {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    min-height: 300px;
+    padding: 18px;
+
+    border: 1px solid #f0e8e2;
+    border-radius: 18px;
+
+    background-color: #ffffff;
+    box-shadow: 0 4px 16px rgb(70 50 40 / 5%);
+}
+
+/* uiRenderer.js が追加する画像・動画 */
+
+.rabbit-media {
+    display: block;
+
+    width: auto;
+    max-width: min(100%, 480px);
+    max-height: 480px;
+
+    height: auto;
+    object-fit: contain;
+
+    margin: 0 auto;
+}
+
+/* うさぎのセリフ */
+
+#speech-bubble {
+    width: fit-content;
+    max-width: 100%;
+
+    margin: 12px auto 0;
+    padding: 10px 18px;
+
+    border-radius: 16px;
+
+    background-color: #e3f2fd;
+    color: #455a64;
+
+    font-size: 1rem;
+    text-align: center;
+
+    overflow-wrap: anywhere;
+}
+
+/* 空のセリフ欄は余白を作らない */
+
+#speech-bubble:empty {
+    display: none;
+}
+
+/* ==================================================
+   日記入力欄
+   ================================================== */
+
+#diary-input-section {
+    margin-bottom: 28px;
+    padding: 24px;
+
+    border: 1px solid #eee5df;
+    border-radius: 16px;
+
+    background-color: #ffffff;
+    box-shadow: 0 3px 12px rgb(70 50 40 / 5%);
+}
+
+#diary-input {
+    width: 100%;
+    min-height: 170px;
+    margin-bottom: 16px;
+}
+
+#analyze-button {
+    display: block;
+    width: 100%;
+    min-height: 48px;
+
+    background-color: #81a87b;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+#analyze-button:hover {
+    background-color: #668b61;
+}
+
+/* ==================================================
+   日記一覧
+   ================================================== */
+
+#diary-book-section {
+    margin-bottom: 28px;
+    padding: 24px;
+
+    border: 1px solid #eee5df;
+    border-radius: 16px;
+
+    background-color: #ffffff;
+    box-shadow: 0 3px 12px rgb(70 50 40 / 5%);
+}
+
+#diary-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* 日記1件分 */
+
+.diary-list-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px 14px;
+    align-items: start;
+
+    padding: 16px;
+
+    border: 1px solid #e9dfd8;
+    border-radius: 12px;
+
+    background-color: #fffdfb;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.diary-list-item:hover {
+    border-color: #d8c3b6;
+    box-shadow: 0 2px 8px rgb(70 50 40 / 5%);
+}
+
+.diary-list-date {
+    grid-column: 1 / -1;
+
+    color: #8d6e63;
+    font-size: 0.88rem;
+    font-weight: 700;
+}
+
+.diary-list-text {
+    min-width: 0;
+    margin: 0;
+
+    color: #51463f;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+}
+
+.diary-list-item > button {
+    grid-column: 2;
+    grid-row: 2;
+
+    align-self: center;
+    white-space: nowrap;
+}
+
+/* 一覧に表示する反応画像 */
+
+.diary-list-item .diary-action-thumbnail {
+    grid-column: 1;
+    grid-row: 3;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    width: fit-content;
+    max-width: 100%;
+    margin-top: 4px;
+    padding: 6px;
+
+    border: 1px solid #f0e5dd;
+    border-radius: 10px;
+
+    background-color: #ffffff;
+}
+
+.diary-list-item .diary-action-thumbnail img {
+    display: block;
+
+    width: 90px;
+    height: 78px;
+
+    object-fit: contain;
+}
+
+.diary-list-item .diary-action-caption {
+    max-width: 120px;
+    margin-top: 3px;
+
+    color: #80695c;
+    font-size: 0.75rem;
+    line-height: 1.4;
+
+    overflow-wrap: anywhere;
+}
+
+/* 日記がない場合 */
+
+#diary-empty-message {
+    margin: 8px 0;
+
+    color: #998d85;
+    text-align: center;
+}
+
+/* ==================================================
+   日記詳細
+   ================================================== */
+
+#diary-detail-section {
+    margin-bottom: 28px;
+    padding: 24px;
+
+    border: 1px solid #eee5df;
+    border-radius: 16px;
+
+    background-color: #ffffff;
+    box-shadow: 0 3px 12px rgb(70 50 40 / 5%);
+}
+
+#diary-detail-date {
+    margin-bottom: 20px;
+
+    color: #8d6e63;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.diary-detail-label {
+    margin: 18px 0 8px;
+
+    color: #795548;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+/* 詳細画面の本文 */
+
+#diary-detail-text {
+    min-height: 50px;
+    padding: 14px;
+
+    border: 1px solid #eee5df;
+    border-radius: 10px;
+
+    background-color: #fffdfb;
+    color: #51463f;
+
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+}
+
+/* うさぎの反応画像を表示する領域 */
+
+#diary-detail-action {
+    margin-bottom: 20px;
+}
+
+#diary-detail-action-thumbnail {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+/* 詳細画面のサムネール */
+
+#diary-detail-action-thumbnail .diary-action-thumbnail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: fit-content;
+    max-width: 100%;
+    padding: 10px;
+
+    border: 1px solid #eee0d7;
+    border-radius: 12px;
+
+    background-color: #fffdfb;
+}
+
+#diary-detail-action-thumbnail .diary-action-thumbnail img {
+    display: block;
+
+    width: 180px;
+    height: 150px;
+
+    object-fit: contain;
+}
+
+#diary-detail-action-thumbnail .diary-action-caption {
+    margin-top: 8px;
+
+    color: #80695c;
+    font-size: 0.85rem;
+    text-align: center;
+
+    overflow-wrap: anywhere;
+}
+
+.diary-no-action {
+    margin: 0;
+    padding: 10px 0;
+
+    color: #998d85;
+    font-size: 0.9rem;
+}
+
+/* ==================================================
+   編集・追記フォーム
+   ================================================== */
+
+#diary-edit-section {
+    margin-bottom: 28px;
+    padding: 24px;
+
+    border: 1px solid #eee5df;
+    border-radius: 16px;
+
+    background-color: #ffffff;
+    box-shadow: 0 3px 12px rgb(70 50 40 / 5%);
+}
+
+.diary-edit-label {
+    display: block;
+    margin: 16px 0 6px;
+
+    color: #795548;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+#diary-edit-date {
+    display: block;
+    width: 100%;
+    min-height: 44px;
+}
+
+#diary-edit-text {
+    display: block;
+    width: 100%;
+    min-height: 180px;
+    margin-bottom: 18px;
+
+    resize: vertical;
+}
+
+/* ==================================================
+   詳細画面・編集画面のボタン
+   ================================================== */
+
+.diary-detail-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    margin: 20px 0;
+}
+
+#diary-detail-edit,
+#diary-edit-save {
+    background-color: #81a87b;
+}
+
+#diary-detail-edit:hover,
+#diary-edit-save:hover {
+    background-color: #668b61;
+}
+
+#diary-detail-delete {
+    background-color: #c87570;
+}
+
+#diary-detail-delete:hover {
+    background-color: #a9534e;
+}
+
+#diary-detail-back,
+#diary-edit-cancel {
+    background-color: #a99b91;
+}
+
+#diary-detail-back:hover,
+#diary-edit-cancel:hover {
+    background-color: #8b7d73;
+}
+
+/* ==================================================
+   フッター
+   ================================================== */
+
+#footer-links {
+    margin: 28px 0 8px;
+    text-align: center;
+}
+
+.readme-link {
+    display: inline-block;
+    padding: 8px 12px;
+
+    color: #6b8f9e;
+    font-size: 0.9rem;
+    text-decoration: none;
+
+    border-radius: 8px;
+}
+
+.readme-link:hover {
+    color: #426e80;
+    background-color: #eaf3f7;
+    text-decoration: underline;
+}
+
+/* ==================================================
+   旧 UI との互換性
+   既存コードが旧 ID を参照しても基本的な表示を維持
+   ================================================== */
+
+#diary-section {
+    margin-bottom: 24px;
+}
+
+#diary-section #diary-input {
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+#diary-section #analyze-button {
+    margin-left: 0;
+}
+
+/* ==================================================
+   非表示制御
+   ブラウザ既定の display 指定より hidden を優先
+   ================================================== */
+
+[hidden] {
+    display: none !important;
+}
+
+/* ==================================================
+   スマートフォン対応
+   ================================================== */
+
+@media (max-width: 600px) {
+    body {
+        padding: 20px 12px;
+    }
+
+    .app-header {
+        margin-bottom: 20px;
+    }
+
+    .app-header h1 {
+        font-size: 1.45rem;
+    }
+
+    h2 {
+        font-size: 1.15rem;
+    }
+
+    #speech-section,
+    #diary-input-section,
+    #diary-book-section,
+    #diary-detail-section,
+    #diary-edit-section {
+        padding: 16px;
+        border-radius: 12px;
+    }
+
+    #petname-control {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #petname-input,
+    #petname-save {
+        width: 100%;
+    }
+
+    #rabbit-area {
+        min-height: 240px;
+        padding: 12px;
+    }
+
+    .rabbit-media {
+        max-width: 100%;
+        max-height: 360px;
+    }
+
+    #speech-bubble {
+        padding: 9px 12px;
+        font-size: 0.95rem;
+    }
+
+    #diary-input {
+        min-height: 150px;
+    }
+
+    .diary-list-item {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 10px;
+    }
+
+    .diary-list-item > button {
+        grid-column: 1;
+        grid-row: auto;
+
+        width: 100%;
+    }
+
+    .diary-list-item .diary-action-thumbnail {
+        grid-column: 1;
+        grid-row: auto;
+    }
+
+    .diary-list-item .diary-action-thumbnail img {
+        width: 100px;
+        height: 85px;
+    }
+
+    #diary-detail-action-thumbnail .diary-action-thumbnail img {
+        width: min(180px, 100%);
+        height: 140px;
+    }
+
+    .diary-detail-actions {
+        flex-direction: column;
+    }
+
+    .diary-detail-actions button,
+    #diary-detail-back {
+        width: 100%;
+    }
+}
+
+/* ==================================================
+   動きを控えたい環境への配慮
+   ================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}
+
+/* ==================================================
+   日記帳の印刷／PDF保存
+   通常画面には印刷専用領域を表示しない。
+   ================================================== */
+
+.diary-export-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin: 0 0 16px;
+}
+
+#diary-print-button {
+    background-color: #6b8f9e;
+}
+
+#diary-print-button:hover {
+    background-color: #426e80;
+}
+
+/* 印刷専用領域は画面上では非表示 */
+.print-only {
+    display: none;
+}
+
+@media print {
+    @page {
+        size: A4;
+        margin: 14mm;
+    }
+
+    html {
+        min-height: 0;
+        scroll-behavior: auto;
+    }
+
+    body {
+        display: block !important;
+        min-height: 0;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #ffffff !important;
+        color: #222222 !important;
+        font-family: "Yu Gothic", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+        font-size: 10.5pt;
+        line-height: 1.6;
+    }
+
+    #app-container {
+        width: auto !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* Direct Talk、入力欄、一覧、詳細、編集、フッターを印刷対象から外す */
+    #app-container > :not(#diary-print-area) {
+        display: none !important;
+    }
+
+    #diary-print-area.print-only {
+        display: block !important;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        color: #222222;
+        background: #ffffff;
+    }
+
+    .print-book-header {
+        margin: 0 0 8mm;
+        padding: 0 0 4mm;
+        border-bottom: 1.5pt solid #9b8172;
+        break-after: avoid-page;
+        page-break-after: avoid;
+    }
+
+    .print-book-header h1 {
+        margin: 0 0 2mm;
+        color: #60483d;
+        font-size: 21pt;
+        line-height: 1.35;
+    }
+
+    .print-book-summary,
+    .print-generated-at {
+        margin: 1mm 0 0;
+        color: #555555;
+        font-size: 9pt;
+    }
+
+    .print-diary-entry {
+        margin: 0 0 7mm;
+        padding: 0 0 6mm;
+        border-bottom: 0.6pt solid #d9d1cc;
+        break-inside: avoid-page;
+        page-break-inside: avoid;
+    }
+
+    .print-entry-header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 5mm;
+        margin: 0 0 2mm;
+        break-after: avoid-page;
+        page-break-after: avoid;
+    }
+
+    .print-diary-date {
+        margin: 0;
+        color: #60483d;
+        font-size: 12pt;
+        line-height: 1.4;
+    }
+
+    .print-diary-number {
+        flex-shrink: 0;
+        color: #777777;
+        font-size: 8.5pt;
+    }
+
+    .print-diary-text {
+        margin: 0;
+        color: #222222;
+        overflow-wrap: anywhere;
+        white-space: pre-wrap;
+    }
+
+    .print-diary-reaction {
+        display: flex;
+        align-items: flex-start;
+        gap: 4mm;
+        margin-top: 3mm;
+        break-inside: avoid-page;
+        page-break-inside: avoid;
+    }
+
+    .print-diary-reaction img {
+        display: block;
+        flex: 0 0 auto;
+        width: 34mm;
+        height: 29mm;
+        object-fit: contain;
+    }
+
+    .print-diary-caption {
+        margin: 1mm 0 0;
+        color: #66564d;
+        font-size: 9pt;
+        overflow-wrap: anywhere;
+    }
+
+    .print-no-action {
+        margin: 0;
+        color: #666666;
+        font-size: 9pt;
+    }
+
+    .print-book-footer {
+        margin-top: 5mm;
+        padding-top: 2mm;
+        border-top: 0.5pt solid #dddddd;
+        color: #777777;
+        font-size: 8pt;
+        text-align: center;
+    }
+
+    button,
+    input,
+    textarea,
+    .readme-link {
+        display: none !important;
+    }
+
+    *,
+    *::before,
+    *::after {
+        box-shadow: none !important;
+        text-shadow: none !important;
+        transition: none !important;
+        animation: none !important;
+    }
+}
+

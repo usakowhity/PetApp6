@@ -1,0 +1,227 @@
+[
+  {
+    "id": "T01",
+    "diary": "今日はちょっと悲しいことがあった。誰かにそばにいてほしいな。",
+    "emotions": [
+      { "label": "sadness", "score": 0.90 }
+    ],
+    "needs": [
+      { "label": "companionship", "score": 0.95 }
+    ],
+    "expected_actions": ["R01"]
+  },
+  {
+    "id": "T02",
+    "diary": "今日は悲しいことがあった。でも、何も言わずに静かにそばにいてくれたらうれしい。",
+    "emotions": [
+      { "label": "sadness", "score": 0.90 }
+    ],
+    "needs": [
+      { "label": "quiet_presence", "score": 0.95 }
+    ],
+    "expected_actions": ["R04"]
+  },
+  {
+    "id": "T03",
+    "diary": "今日はつらいことがあった。少し話を聞いてほしい。",
+    "emotions": [
+      { "label": "sadness", "score": 0.90 }
+    ],
+    "needs": [
+      { "label": "listening", "score": 0.90 }
+    ],
+    "expected_actions": ["R09"]
+  },
+  {
+    "id": "T04",
+    "diary": "失敗して落ち込んでいる。そっと励ましてもらえたらいいな。",
+    "emotions": [
+      { "label": "sadness", "score": 0.85 }
+    ],
+    "needs": [
+      { "label": "encouragement", "score": 0.90 }
+    ],
+    "expected_actions": ["R13"]
+  },
+  {
+    "id": "T05",
+    "diary": "なんだか今日は寂しい。急に近くに来てくれたらうれしいな。",
+    "emotions": [
+      { "label": "sadness", "score": 0.85 }
+    ],
+    "needs": [
+      { "label": "gentle_approach", "score": 0.90 }
+    ],
+    "expected_actions": ["R16"]
+  },
+
+  {
+    "id": "T06",
+    "diary": "今日は一人で過ごしていて、すごく寂しかった。誰かとつながっていたい。",
+    "emotions": [
+      { "label": "loneliness", "score": 0.92 }
+    ],
+    "needs": [
+      { "label": "connection", "score": 0.90 }
+    ],
+    "expected_actions": ["R02", "R06"]
+  },
+  {
+    "id": "T07",
+    "diary": "仕事で疲れた。今日はもう何も考えずに一緒にごろんとしたい。",
+    "emotions": [
+      { "label": "fatigue_apathy", "score": 0.88 }
+    ],
+    "needs": [
+      { "label": "togetherness", "score": 0.90 }
+    ],
+    "expected_actions": ["R05"]
+  },
+  {
+    "id": "T08",
+    "diary": "今日は本当に疲れた。静かに休みたい。",
+    "emotions": [
+      { "label": "fatigue_apathy", "score": 0.95 }
+    ],
+    "needs": [
+      { "label": "quiet_rest", "score": 0.95 }
+    ],
+    "expected_actions": ["R15"]
+  },
+  {
+    "id": "T09",
+    "diary": "嫌なことがあってイライラしている。少し落ち着きたい。",
+    "emotions": [
+      { "label": "anger", "score": 0.88 }
+    ],
+    "needs": [
+      { "label": "relaxation", "score": 0.90 }
+    ],
+    "expected_actions": ["R07", "R05"]
+  },
+  {
+    "id": "T10",
+    "diary": "どうなるか分からなくて不安。そばにいて安心させてほしい。",
+    "emotions": [
+      { "label": "anxiety_fear", "score": 0.93 }
+    ],
+    "needs": [
+      { "label": "reassurance", "score": 0.95 }
+    ],
+    "expected_actions": ["R03", "R04", "R08"]
+  },
+
+  {
+    "id": "T11",
+    "diary": "今日はうれしいことがあった。この喜びを一緒に感じてほしい。",
+    "emotions": [
+      { "label": "joy", "score": 0.95 }
+    ],
+    "needs": [
+      { "label": "share_joy", "score": 0.95 }
+    ],
+    "expected_actions": ["R14"]
+  },
+  {
+    "id": "T12",
+    "diary": "今日はなんだか気分がよくて、うさぎとつながっている感じがしたい。",
+    "emotions": [
+      { "label": "pleasant", "score": 0.85 }
+    ],
+    "needs": [
+      { "label": "connection", "score": 0.90 }
+    ],
+    "expected_actions": ["R02"]
+  },
+  {
+    "id": "T13",
+    "diary": "心配していたことが無事に終わった。ほっとしたので、ゆっくりしたい。",
+    "emotions": [
+      { "label": "relief", "score": 0.93 }
+    ],
+    "needs": [
+      { "label": "relaxation", "score": 0.90 }
+    ],
+    "expected_actions": ["R08", "R05"]
+  },
+  {
+    "id": "T14",
+    "diary": "大切な人のことを考えていたら、なんだかうさぎに甘えたくなった。",
+    "emotions": [
+      { "label": "affection", "score": 0.88 }
+    ],
+    "needs": [
+      { "label": "warmth", "score": 0.90 }
+    ],
+    "expected_actions": ["R06"]
+  },
+  {
+    "id": "T15",
+    "diary": "今日は誰かのつらい気持ちを考えていた。自分の気持ちもそっと受け止めてほしい。",
+    "emotions": [
+      { "label": "empathy_compassion", "score": 0.88 }
+    ],
+    "needs": [
+      { "label": "understanding", "score": 0.90 }
+    ],
+    "expected_actions": ["R11", "R03"]
+  },
+
+  {
+    "id": "T16",
+    "diary": "今日は不安なことを誰かに聞いてほしい。ちゃんと耳を傾けてもらいたい。",
+    "emotions": [
+      { "label": "anxiety_fear", "score": 0.85 }
+    ],
+    "needs": [
+      { "label": "listening", "score": 0.95 }
+    ],
+    "expected_actions": ["R09"]
+  },
+  {
+    "id": "T17",
+    "diary": "うまく説明できないけれど、今の気持ちを分かってほしい。",
+    "emotions": [
+      { "label": "sadness", "score": 0.70 },
+      { "label": "loneliness", "score": 0.55 }
+    ],
+    "needs": [
+      { "label": "understanding", "score": 0.95 }
+    ],
+    "expected_actions": ["R03", "R11"]
+  },
+  {
+    "id": "T18",
+    "diary": "今日は少し怒っている。でも、何も言わずに静かにそばにいてほしい。",
+    "emotions": [
+      { "label": "anger", "score": 0.82 }
+    ],
+    "needs": [
+      { "label": "quiet_presence", "score": 0.95 }
+    ],
+    "expected_actions": ["R04"]
+  },
+  {
+    "id": "T19",
+    "diary": "特に困っているわけではないけれど、今日は何となくうさぎにそばにいてほしい。",
+    "emotions": [
+      { "label": "pleasant", "score": 0.45 }
+    ],
+    "needs": [
+      { "label": "companionship", "score": 0.90 }
+    ],
+    "expected_actions": ["R04"],
+    "test_type": "fallback"
+  },
+  {
+    "id": "T20",
+    "diary": "今日は助けてもらって、とてもありがたい気持ち。うさぎと喜びを一緒に感じたい。",
+    "emotions": [
+      { "label": "gratitude", "score": 0.90 }
+    ],
+    "needs": [
+      { "label": "share_joy", "score": 0.85 }
+    ],
+    "expected_actions": ["R14"]
+  }
+]
