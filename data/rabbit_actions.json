@@ -267,5 +267,16 @@
     "short_phrases": [
       "シー。"
     ]
+  },
+  "R21": {
+    "id": "R21",
+    "name": "ハウス",
+    "image": "assets/rabbit/actions/R21.png",
+    "needs": [],
+    "short_phrases": [
+      "……。",
+      "スン…。",
+      "ここ。"
+    ]
   }
 }

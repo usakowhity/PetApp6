@@ -259,6 +259,11 @@ function detectDirectTalkAction(text) {
         return "R20";
     }
 
+    // ハウス
+    if (normalizedText.includes("ハウス") || normalizedText.includes("おうち")) {
+        return "R21";
+    }
+
     return null;
 }
 
