@@ -104,7 +104,7 @@
   "R08": {
     "id": "R08",
     "name": "ごろんと安心する",
-    "image": "assets/rabbit/actions/R08.png",
+    "image": "assets/rabbit/actions/R08.mp4",
     "needs": [
       "relaxation",
       "reassurance"
@@ -112,6 +112,7 @@
     "short_phrases": [
       "ほっ……。",
       "あんしん。",
+      "ごろん。",
       "のびー。"
     ]
   },
