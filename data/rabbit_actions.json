@@ -257,5 +257,14 @@
       "モグモグ。",
       "ポリポリ。"
     ]
+  },
+  "R20": {
+    "id": "R20",
+    "name": "トイレ",
+    "image": "assets/rabbit/actions/R20.png",
+    "needs": [],
+    "short_phrases": [
+      "シー。"
+    ]
   }
 }

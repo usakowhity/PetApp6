@@ -209,35 +209,54 @@ function startSpeechRecognition() {
 }
 
 function detectDirectTalkAction(text) {
+    // 認識文字列の前後に付く空白・句読点を整理する。
+    // 例：「、トイレ。」→「トイレ」
+    const normalizedText = String(text || "")
+        .trim()
+        .replace(/^[、,，\s]+/, "")
+        .replace(/[。！!？?\s]+$/, "");
+
     // あいさつ
-    if (text.includes("おはよう")) return "R10";
-    if (text.includes("元気")) return "R11";
+    if (normalizedText.includes("おはよう")) return "R10";
+    if (normalizedText.includes("元気")) return "R11";
 
     // 喜び・休息
-    if (/かわいい|可愛い|カワイイ|おりこう|お利口/.test(text)) {
+    if (/かわいい|可愛い|カワイイ|おりこう|お利口/.test(normalizedText)) {
         return "R14";
     }
 
-    if (text.includes("おやすみ")) return "R15";
-    if (text.includes("ねんね")) return "R08";
+    if (normalizedText.includes("おやすみ")) return "R15";
+    if (normalizedText.includes("ねんね")) return "R08";
 
     // 呼びかけ
-    if (text.includes("おいで")) return "R16";
+    if (normalizedText.includes("おいで")) return "R16";
 
     // 食べ物
-    if (text.includes("ごはん")) return "R19";
-    if (text.includes("牧草") || text.includes("チモシー")) {
+    if (normalizedText.includes("ごはん")) return "R19";
+    if (normalizedText.includes("牧草") || normalizedText.includes("チモシー")) {
         return "R17";
     }
 
     // 飲み水
-    if (text.includes("水") || text.includes("お水")) {
+    if (normalizedText.includes("水") || normalizedText.includes("お水")) {
         return "R18";
     }
 
     // お腹が空いた
-    if (text.includes("お腹") || text.includes("すいた")) {
+    if (normalizedText.includes("お腹") || normalizedText.includes("すいた")) {
         return "R03";
+    }
+
+    // トイレ（R20）
+    // 「シー」は単独、またはトイレ動作を表す言い方に限定し、
+    // 「タクシー」など別の単語に含まれる文字列では誤反応しない。
+    if (
+        normalizedText.includes("トイレ") ||
+        normalizedText.includes("おしっこ") ||
+        normalizedText.includes("ちっち") ||
+        /(^|[\s、,，])シー(?:してね|して|する|だよ)?$/.test(normalizedText)
+    ) {
+        return "R20";
     }
 
     return null;
