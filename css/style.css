@@ -776,9 +776,20 @@ textarea {
    ================================================== */
 
 .diary-export-actions {
-    display: flex;
+    display: flex !important;
     justify-content: flex-end;
+    align-items: center;
+    width: 100%;
     margin: 0 0 16px;
+}
+
+#diary-print-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    visibility: visible;
+    opacity: 1;
 }
 
 #diary-print-button {

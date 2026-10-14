@@ -1,280 +1,120 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>癒しウサギの日記帳 - PetApp6</title>
-
     <link rel="stylesheet" href="./css/style.css">
 </head>
-
 <body>
-
     <div id="app-container">
-
-        <!-- =========================
-             アプリタイトル
-             ========================= -->
+        <!-- アプリタイトル -->
         <header class="app-header">
             <h1>🐇 癒しウサギの日記帳</h1>
         </header>
 
-
-        <!-- =========================
-             PetApp5 / Direct Talk
-             ========================= -->
+        <!-- PetApp5 / Direct Talk -->
         <section id="speech-section">
-
             <div id="petname-control">
                 <input
                     id="petname-input"
                     type="text"
                     placeholder="ウサギの名前を入力してね…"
-                />
-
-                <button
-                    id="petname-save"
-                    type="button"
                 >
-                    名前を設定
-                </button>
+                <button id="petname-save" type="button">名前を設定</button>
             </div>
-
             <p id="talk-hint">
-                <button
-                    id="start-voice"
-                    type="button"
-                >
-                    話しかける
-                </button>
+                <button id="start-voice" type="button">話しかける</button>
             </p>
-
             <div id="speech-result"></div>
-
         </section>
 
-
-        <!-- =========================
-             うさぎ表示
-             ========================= -->
+        <!-- うさぎ表示 -->
         <section id="rabbit-section">
-
             <div id="rabbit-area">
-
                 <div id="speech-bubble"></div>
-
             </div>
-
         </section>
 
-
-        <!-- =========================
-             日記入力
-             ========================= -->
+        <!-- 日記入力 -->
         <section id="diary-input-section">
-
             <h2>今日の日記</h2>
-
             <textarea
                 id="diary-input"
                 placeholder="今日のこと、感じたことを書いてみてね…"
             ></textarea>
-
-            <button
-                id="analyze-button"
-                type="button"
-            >
-                ウサギに聞かせる
-            </button>
-
+            <button id="analyze-button" type="button">ウサギに聞かせる</button>
         </section>
 
-
-        <!-- =========================
-             日記帳
-             ========================= -->
+        <!-- 日記帳 -->
         <section id="diary-book-section">
-
             <h2>日記帳</h2>
-
-            <div id="diary-list">
-
-                <p id="diary-empty-message">
-                    まだ日記はありません。
-                </p>
-
+            <div id="diary-export-actions" class="diary-export-actions">
+                <button id="diary-print-button" type="button">🖨️ 印刷／PDF保存</button>
             </div>
-
+            <div id="diary-list">
+                <p id="diary-empty-message">まだ日記はありません。</p>
+            </div>
         </section>
 
-
-        <!-- =========================
-             日記詳細
-             ========================= -->
-        <section
-            id="diary-detail-section"
-            hidden
-        >
-
+        <!-- 日記詳細 -->
+        <section id="diary-detail-section" hidden>
             <h2>日記の詳細</h2>
-
-
-            <!-- 日付 -->
             <div id="diary-detail-date"></div>
 
-
-            <!-- 本文 -->
-            <div class="diary-detail-label">
-                本文
-            </div>
-
+            <div class="diary-detail-label">本文</div>
             <div id="diary-detail-text"></div>
 
-
-            <!-- うさぎの反応 -->
-            <div class="diary-detail-label">
-                うさぎの反応
-            </div>
-
+            <div class="diary-detail-label">うさぎの反応</div>
             <div id="diary-detail-action">
-
-                <!--
-                    actionId に対応する
-                    R01〜R21 のサムネールを
-                    app.js から表示する。
-                -->
                 <div id="diary-detail-action-thumbnail"></div>
-
             </div>
 
-
-            <!-- 編集・追記・削除 -->
-            <div
-                id="diary-detail-actions"
-                class="diary-detail-actions"
-            >
-
-                <button
-                    id="diary-detail-edit"
-                    type="button"
-                >
-                    編集・追記
-                </button>
-
-                <button
-                    id="diary-detail-delete"
-                    type="button"
-                >
-                    削除
-                </button>
-
+            <div id="diary-detail-actions" class="diary-detail-actions">
+                <button id="diary-detail-edit" type="button">編集・追記</button>
+                <button id="diary-detail-delete" type="button">削除</button>
             </div>
 
-
-            <!-- 一覧へ戻る -->
-            <button
-                id="diary-detail-back"
-                type="button"
-            >
-                日記一覧に戻る
-            </button>
-
+            <button id="diary-detail-back" type="button">日記一覧に戻る</button>
         </section>
 
-
-        <!-- =========================
-             日記編集
-             ========================= -->
-        <section
-            id="diary-edit-section"
-            hidden
-        >
-
+        <!-- 日記編集 -->
+        <section id="diary-edit-section" hidden>
             <h2>日記を編集</h2>
 
+            <label for="diary-edit-date" class="diary-edit-label">日付</label>
+            <input id="diary-edit-date" type="date">
 
-            <!-- 編集対象の日付 -->
-            <label
-                for="diary-edit-date"
-                class="diary-edit-label"
-            >
-                日付
-            </label>
-
-            <input
-                id="diary-edit-date"
-                type="date"
-            />
-
-
-            <!-- 編集本文 -->
-            <label
-                for="diary-edit-text"
-                class="diary-edit-label"
-            >
-                本文
-            </label>
-
+            <label for="diary-edit-text" class="diary-edit-label">本文</label>
             <textarea
                 id="diary-edit-text"
                 placeholder="日記を書いてみてね…"
             ></textarea>
 
-
-            <!-- 編集確定・キャンセル -->
-            <div
-                id="diary-edit-actions"
-                class="diary-detail-actions"
-            >
-
-                <button
-                    id="diary-edit-save"
-                    type="button"
-                >
-                    保存
-                </button>
-
-                <button
-                    id="diary-edit-cancel"
-                    type="button"
-                >
-                    キャンセル
-                </button>
-
+            <div id="diary-edit-actions" class="diary-detail-actions">
+                <button id="diary-edit-save" type="button">保存</button>
+                <button id="diary-edit-cancel" type="button">キャンセル</button>
             </div>
-
         </section>
 
-
-        <!-- =========================
-             フッター
-             ========================= -->
+        <!-- フッター -->
         <footer id="footer-links">
-
             <a
                 class="readme-link"
                 href="./README.md"
                 target="_blank"
                 rel="noopener"
-            >
-                📘 PetApp6 の使い方（README）
-            </a>
-
+            >📘 PetApp6 の使い方（README）</a>
         </footer>
 
+        <!-- 印刷／PDF保存専用領域。通常画面では非表示 -->
+        <section
+            id="diary-print-area"
+            class="print-only"
+            aria-label="印刷用の日記帳"
+        ></section>
     </div>
 
-
-    <!-- =========================
-         JavaScript
-         ========================= -->
-    <script
-        type="module"
-        src="./js/app.js"
-    ></script>
-
+    <script type="module" src="./js/app.js"></script>
 </body>
-
 </html>
