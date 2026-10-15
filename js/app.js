@@ -74,22 +74,15 @@ function getDiaryText() {
     return textarea ? textarea.value.trim() : "";
 }
 
-function getActionImagePath(actionId, forPrint = false) {
+function getActionImagePath(actionId) {
     if (!actionId) {
         return null;
     }
 
     const action = rabbitActions[actionId];
 
-    // 通常表示：image / 日記一覧・詳細・印刷：print_image
-    if (action) {
-        const mediaPath = forPrint
-            ? (action.print_image || action.image)
-            : action.image;
-
-        if (mediaPath) {
-            return `./${mediaPath.replace(/^\.?\//, "")}`;
-        }
+    if (action && action.image) {
+        return `./${action.image.replace(/^\.?\//, "")}`;
     }
 
     // JSON に画像パスがない場合の互換用フォールバック
@@ -266,6 +259,21 @@ function detectDirectTalkAction(text) {
         return "R20";
     }
 
+    // ハウス(R21)
+    if (normalizedText.includes("ハウス") || normalizedText.includes("おうち")) {
+        return "R21";
+    }
+
+    // 散歩 (R22)
+    if (normalizedText.includes("散歩") || normalizedText.includes("おそと")) {
+        return "R22";
+    }
+
+    // お祝い (R23)
+    if (normalizedText.includes("おめでとう") || normalizedText.includes("ハッピーバースデー")) {
+        return "R23";
+    }
+
     return null;
 }
 
@@ -385,6 +393,8 @@ async function processDiary() {
 
 // --------------------------------------------------
 // 日記一覧
+// --------------------------------------------------
+
 function renderDiaryList() {
     const list = document.getElementById("diary-list");
 
@@ -519,7 +529,7 @@ function showDiaryDetail(id) {
 }
 
 function createActionThumbnail(actionId, altText) {
-    const imagePath = getActionImagePath(actionId, true);
+    const imagePath = getActionImagePath(actionId);
 
     if (!imagePath) {
         return null;
@@ -715,6 +725,7 @@ function setupDiaryDeleteButton() {
 // --------------------------------------------------
 // 日記帳の印刷／PDF保存
 // --------------------------------------------------
+
 function setupDiaryPrintButton() {
     const button = document.getElementById("diary-print-button");
 
@@ -833,7 +844,7 @@ function renderDiaryPrintDocument(diaries, container) {
         const reaction = document.createElement("div");
         reaction.className = "print-diary-reaction";
 
-        const imagePath = getActionImagePath(diary.actionId, true);
+        const imagePath = getActionImagePath(diary.actionId);
 
         if (diary.actionId && imagePath) {
             const image = document.createElement("img");
