@@ -474,9 +474,9 @@ PetApp6は差分追加型で開発します。
 -   **開発者：** usakowhity
 -   **ライセンス：** MIT（リポジトリのLICENSEファイルを参照）
 -   **公開URL：**
-  🚀 **GitHub Pages (Main):** https://usakowhity.github.io/PetApp6/
-  ⚡ **Vercel Mirror (Fast Mirror):** https://petapp6.vercel.app/
-  🌿 **Netlify Portal:** https://petapp6.netlify.app/
+-  🚀 **GitHub Pages (Main):** https://usakowhity.github.io/PetApp6/
+-  ⚡ **Vercel Mirror (Fast Mirror):** https://petapp6.vercel.app/
+-  🌿 **Netlify Portal:** https://petapp6.netlify.app/
 -   **GitHubリポジトリ：** https://github.com/usakowhity/PetApp6
 
 ### バージョン履歴
