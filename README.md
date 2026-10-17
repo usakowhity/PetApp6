@@ -473,7 +473,7 @@ PetApp6は差分追加型で開発します。
 -   **動作確認：** PDF表示がきれいに行えることを確認
 -   **開発者：** usakowhity
 -   **ライセンス：** MIT（リポジトリのLICENSEファイルを参照）
--   **公開URL：
+-   **公開URL：**
 - 🚀 **GitHub Pages (Main):** https://usakowhity.github.io/PetApp6/
 - ⚡ **Vercel Mirror (Fast Mirror):** https://petapp6.vercel.app/
 - 🌿 **Netlify Portal:** https://petapp6.netlify.app/
