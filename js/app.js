@@ -313,7 +313,10 @@ function detectEmotionNeed(text) {
         };
     }
 
-    if (/嬉|楽し|よかった|ご機嫌|ラッキー/.test(text)) {
+    // 喜び・楽しさ・嬉しさ
+    // 「嬉しい／うれしい」「良かった／よかった」の表記ゆれを
+    // 同じ joy として扱う。
+    if (/嬉|うれし|楽し|良かった|よかった|ご機嫌|ラッキー/.test(text)) {
         return {
             emotions: [{ label: "joy", score: 1.0 }],
             needs: [{ label: "share_joy", score: 1.0 }]
