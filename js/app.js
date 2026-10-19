@@ -221,7 +221,7 @@ function detectDirectTalkAction(text) {
     if (normalizedText.includes("元気")) return "R11";
 
     // 喜び・休息
-    if (/かわいい|可愛い|カワイイ|おりこう|お利口/.test(normalizedText)) {
+    if (/かわいい|可愛い|カワイイ|いいこ|おりこう|お利口/.test(normalizedText)) {
         return "R14";
     }
 
@@ -314,9 +314,9 @@ function detectEmotionNeed(text) {
     }
 
     // 喜び・楽しさ・嬉しさ
-    // 「嬉しい／うれしい」「良かった／よかった」の表記ゆれを
+    // 「嬉しい／うれしい」「良かった／よかった／いいね」の表記ゆれを
     // 同じ joy として扱う。
-    if (/嬉|うれし|楽し|良かった|よかった|ご機嫌|ラッキー/.test(text)) {
+    if (/嬉|うれし|楽し|良かった|よかった|いいね|ご機嫌|ラッキー/.test(text)) {
         return {
             emotions: [{ label: "joy", score: 1.0 }],
             needs: [{ label: "share_joy", score: 1.0 }]
