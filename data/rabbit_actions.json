@@ -125,7 +125,7 @@
     "image": "assets/rabbit/actions/R18.mp4",
     "needs": [],
     "layer": "idle",
-    "short_phrases": ["ちゅっ。", "ぺろぺろ。", "ごくごく。", "……。"]
+    "short_phrases": ["カチャカチャ。", "コクコク。","ちゅっ。", "ぺろぺろ。", "ごくごく。", "……。"]
   },
   "R19": {
     "id": "R19",
