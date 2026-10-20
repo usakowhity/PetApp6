@@ -12,9 +12,9 @@ PetApp6 is a virtual pet diary application that inherits the functionality, file
 
 It is built on PetApp5's Direct Talk, speech recognition, Diary → Emotion/Need → Rabbit Action, and Idle Layer, and adds diary saving, list/detail views, editing, deletion, and printable/PDF diary output with thumbnails.
 
-PetApp6 also keeps the v1.2.1 design that separates normal Rabbit Action media from static images used for diary records and printing. v1.2.2 refined the print/PDF implementation, v1.3.0 added Direct Talk actions R22 and R23, and expanded Rabbit Actions to R01-R23.
+PetApp6 also keeps the v1.2.1 design that separates normal Rabbit Action media from static images used for diary records and printing. v1.2.2 refined the print/PDF implementation, v1.3.0 added Direct Talk actions R22 and R23 and expanded Rabbit Actions to R01-R23, and v1.3.1 fixed a problem where Japanese orthographic variations such as “嬉しい / うれしい” and “良かった / よかった” were not consistently recognized as joy, causing different rabbit reactions.
 
-**v1.3.2 is a bug-fix release.** It fixes a problem where Japanese orthographic variations such as “嬉しい / うれしい” and “良かった / よかった” were not consistently recognized as joy, causing different rabbit reactions.
+**v1.3.2 is a documentation / presentation update.** It improves the README files, adds a home screen image, a link to the YouTube demo, and cross-links between the Japanese and English READMEs. The application itself is unchanged from v1.3.1.
 
 ---
 
@@ -100,7 +100,7 @@ The diary notebook supports:
 
 When a diary is saved, lightweight rule-based processing in `app.js` detects Emotion and Need from keywords and selects a Rabbit Action. No LLM is required for this v1 implementation.
 
-### v1.3.2 joy recognition fix
+### Joy recognition (fixed in v1.3.1)
 
 The following expressions are recognized as `joy` with Need `share_joy`, resulting in **R14 “ぴょんっと喜ぶ”**:
 
@@ -190,6 +190,9 @@ PetApp6/
 │  └─ action_mapping.json
 ├─ css/
 │  └─ style.css
+├─ docs/
+│  └─ images/
+│     └─ petapp6-main.png    # home screen screenshot
 └─ assets/
    └─ rabbit/
       └─ actions/
@@ -225,7 +228,7 @@ petapp6_diaries
 
 The stored record uses `actionId`, not an image filename. This allows Rabbit Action media to change without rewriting existing diary records.
 
-The v1.3.2 emotion-recognition fix applies to newly saved diary entries; existing saved `actionId` values are not rewritten.
+The v1.3.1 emotion-recognition fix applies to newly saved diary entries; existing saved `actionId` values are not rewritten.
 
 ---
 
@@ -235,23 +238,25 @@ The v1.3.2 emotion-recognition fix applies to newly saved diary entries; existin
 - **Vercel:** https://petapp6.vercel.app/
 - **Netlify:** https://petapp6.netlify.app/
 - **GitHub Repository:** https://github.com/usakowhity/PetApp6
+- **YouTube Demo:** https://www.youtube.com/shorts/ECOsiTvbqI8
 
 ---
 
 ## 📦 9. Release Information
 
 - **Version:** v1.3.2
-- **Previous version:** v1.3.0
-- **Release type:** Bug fix (patch)
-- **Main change:** Japanese spelling variations such as “うれしい” and “良かった” are now recognized as `joy` in diary emotion detection.
-- **Changed file:** `app.js` only
+- **Previous version:** v1.3.1
+- **Release type:** Documentation / Presentation Update
+- **Main change:** Updated README.md and README_EN.md, and added cross-links between them, the home screen screenshot, and the YouTube demo link. The application itself is unchanged from v1.3.1.
+- **Application:** Keeps the v1.3.1 emotion-detection fix and all features up to v1.3.0 (including R22 and R23)
 - **Print support:** `print_image` design retained
 - **Developer:** usakowhity
 - **License:** MIT
 
 ### Version History
 
-- **v1.3.2:** Fixed Japanese spelling variations in joy detection
+- **v1.3.2:** Improved README files, home screen image, YouTube demo link, and Japanese/English README cross-links (Documentation / Presentation Update)
+- **v1.3.1:** Fixed Japanese spelling variations such as “うれしい” and “良かった” in joy detection
 - **v1.3.0:** Added Direct Talk R22 “Walk / Outside” and R23 “Congratulations / Happy Birthday”
 - **v1.2.2:** Refined diary printing / PDF display
 - **v1.2.1:** Separated `image` and `print_image` for Rabbit Actions
