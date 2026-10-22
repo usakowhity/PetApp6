@@ -1,8 +1,10 @@
 // ---------------------------------------------
-// Rabbit Action Selector v2.2
+// Rabbit Action Selector v2.3 (PetApp6 v1.3.3)
 // ---------------------------------------------
-// Emotion × Need に基づいて R01〜R16 を選択する
+// Emotion × Need に基づいて Rabbit Action を選択する
 // Canonical Emotion v1.0 / Need v1.0 に準拠
+// v2.3: 最高スコアの候補すべてから均等に選ぶ
+//       （従来は先頭3件のみが対象で、4件目以降は選ばれなかった）
 // ---------------------------------------------
 
 import { loadJSON } from "./dataLoader.js";
@@ -47,9 +49,10 @@ export async function selectRabbitAction({ emotions, needs }) {
         return null;
     }
 
-    // スコア順に並べて上位3件からランダム選択
+    // 最高スコアの候補すべてからランダム選択（候補が4件以上でも全て対象）
     candidates.sort((a, b) => b.score - a.score);
-    const topCandidates = candidates.slice(0, 3);
+    const topScore = candidates[0].score;
+    const topCandidates = candidates.filter(c => c.score === topScore);
     const chosen = topCandidates[Math.floor(Math.random() * topCandidates.length)];
 
     // Actionデータを読み込み

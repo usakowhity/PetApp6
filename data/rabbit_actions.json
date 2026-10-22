@@ -52,6 +52,7 @@
     "id": "R08",
     "name": "ごろんと安心する",
     "image": "assets/rabbit/actions/R08.mp4",
+    "print_image": "assets/rabbit/actions/R08.png",
     "needs": ["relaxation", "reassurance"],
     "short_phrases": ["ほっ……。", "あんしん。", "ごろん。", "のびー。"]
   },
@@ -115,6 +116,7 @@
     "id": "R17",
     "name": "牧草を食べる",
     "image": "assets/rabbit/actions/R17.mp4",
+    "print_image": "assets/rabbit/actions/R17.png",
     "needs": [],
     "layer": "idle",
     "short_phrases": ["もぐもぐ。", "しゃくしゃく。"]
@@ -123,6 +125,7 @@
     "id": "R18",
     "name": "水を飲む",
     "image": "assets/rabbit/actions/R18.mp4",
+    "print_image": "assets/rabbit/actions/R18.png",
     "needs": [],
     "layer": "idle",
     "short_phrases": ["カチャカチャ。", "コクコク。","ちゅっ。", "ぺろぺろ。", "ごくごく。"]
@@ -131,6 +134,7 @@
     "id": "R19",
     "name": "ペレットを食べる",
     "image": "assets/rabbit/actions/R19.mp4",
+    "print_image": "assets/rabbit/actions/R19.png",
     "needs": [],
     "layer": "idle",
     "short_phrases": ["パクパク。", "モグモグ。", "ポリポリ。"]

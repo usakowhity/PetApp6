@@ -1,4 +1,4 @@
-# 🐇 PetApp6 v1.3.2 - Healing Rabbit Diary
+# 🐇 PetApp6 v1.3.3 - Healing Rabbit Diary
 
 [🇯🇵 Japanese Version (README.md)](README.md)
 
@@ -14,7 +14,11 @@ It is built on PetApp5's Direct Talk, speech recognition, Diary → Emotion/Need
 
 PetApp6 also keeps the v1.2.1 design that separates normal Rabbit Action media from static images used for diary records and printing. v1.2.2 refined the print/PDF implementation, v1.3.0 added Direct Talk actions R22 and R23 and expanded Rabbit Actions to R01-R23, and v1.3.1 fixed a problem where Japanese orthographic variations such as “嬉しい / うれしい” and “良かった / よかった” were not consistently recognized as joy, causing different rabbit reactions.
 
-**v1.3.2 is a documentation / presentation update.** It improves the README files, adds a home screen image, a link to the YouTube demo, and cross-links between the Japanese and English READMEs. The application itself is unchanged from v1.3.1.
+> **Language note:** PetApp6 v1 is a Japanese-language app. The interface, speech recognition, Direct Talk trigger words and diary keyword rules are all in Japanese, so English phrases such as "Leo, good morning" will not trigger reactions. English translations below are for reference only.
+
+**v1.3.3** expands the rabbit's reactions to diary entries so that all 23 Rabbit Actions can appear (from the diary, Direct Talk or the idle behavior). It also fixes video-based actions (such as R08) so that diary thumbnails and printed/PDF diaries use still images.
+
+All rabbit images and videos were created with generative AI.
 
 ---
 
@@ -40,43 +44,37 @@ PetApp6 extends PetApp5 rather than replacing it. Existing functionality, module
 
 ## 🎙️ 2. Direct Talk
 
-Direct Talk lets users speak to the rabbit by placing the configured pet name at the beginning of the utterance.
+Direct Talk is **voice-only** (Japanese speech recognition, `ja-JP`). Use a browser that supports speech recognition (for example Chrome or Edge). Keep the default name レオ (Leo), press the talk button and say, for example:
 
-For example, if the pet name is “Leo”:
-
-- Leo, good morning
-- Leo, how are you?
-- Leo, cute
-- Leo, good night
-- Leo, food
-- Leo, water
-- Leo, toilet
-- Leo, house
-- Leo, walk
-- Leo, outside
-- Leo, congratulations
-- Leo, happy birthday
+- レオ、おはよう — "Good morning"
+- レオ、元気 — "How are you?"
+- レオ、かわいい — "You're cute"
+- レオ、おやすみ — "Good night"
+- レオ、ごはん — "Food"
+- レオ、お水 — "Water"
+- レオ、散歩 / おそと — "Walk / outside"
+- レオ、おめでとう — "Congratulations"
 
 The pet name is fully customizable.
 
 ### Direct Talk Dictionary
 
-| Utterance | Action ID | Meaning |
-|---|---|---|
-| Good morning | R10 | Morning greeting |
-| How are you? / 元気 | R11 | Checking condition |
-| Cute / good | R14 | Joy reaction |
-| Good night | R15 | Rest |
-| Sleep / ねんね | R08 | Sleeping reaction |
-| Come here / おいで | R16 | Response to calling |
-| Food / ごはん | R19 | Eating |
-| Hay / timothy | R17 | Eating hay |
-| Water / お水 | R18 | Drinking |
-| Hungry | R03 | Hungry reaction |
-| Toilet / おしっこ etc. | R20 | Toilet reaction |
-| House / おうち | R21 | Entering the house |
-| Walk / outside | R22 | Going outside |
-| Congratulations / happy birthday | R23 | Celebration |
+| Say (Japanese) | Meaning | Action ID | Reaction |
+|---|---|---|---|
+| おはよう | Good morning | R10 | Morning greeting |
+| 元気 | How are you? | R11 | Checking condition |
+| かわいい / 可愛い / カワイイ / いいこ / おりこう / お利口 | Cute / good bunny | R14 | Joy |
+| おやすみ | Good night | R15 | Rest |
+| ねんね | Sleepy time | R08 | Sleeping |
+| おいで | Come here | R16 | Response to call |
+| ごはん | Food | R19 | Eating |
+| 牧草 / チモシー | Hay / timothy | R17 | Eating hay |
+| 水 / お水 | Water | R18 | Drinking |
+| お腹すいた | I'm hungry | R03 | Hungry reaction |
+| トイレ / おしっこ / ちっち / シー | Toilet | R20 | Toilet reaction |
+| ハウス / おうち | House | R21 | Entering the house |
+| 散歩 / おそと | Walk / outside | R22 | Going outside |
+| おめでとう / ハッピーバースデー | Congratulations / HBD | R23 | Celebration |
 
 ---
 
@@ -100,27 +98,21 @@ The diary notebook supports:
 
 When a diary is saved, lightweight rule-based processing in `app.js` detects Emotion and Need from keywords and selects a Rabbit Action. No LLM is required for this v1 implementation.
 
-### Joy recognition (fixed in v1.3.1)
+### Diary reactions (expanded in v1.3.3)
 
-The following expressions are recognized as `joy` with Need `share_joy`, resulting in **R14 “ぴょんっと喜ぶ”**:
+When a diary entry is saved, lightweight rule-based processing in `app.js` detects a feeling from Japanese keywords and picks one Rabbit Action at random from the candidates below. No LLM is used.
 
-| Expression pattern | Examples |
+| Keywords in the entry (Japanese) | Possible Rabbit Actions |
 |---|---|
-| 嬉 / うれし | 嬉しい, うれしい, うれしかった |
-| 楽し | 楽しい, 楽しかった |
-| 良かった / よかった | 良かった, よかったな |
-| ご機嫌 | ご機嫌 |
-| ラッキー | ラッキー |
+| tired / exhausted / sleepy (疲, しんどい, 眠い …) | R15 / R05 / R08 (1/3 each) |
+| sad / painful / crying (悲, つら, 泣, 涙 …) | R01 / R02 / R06 / R07 (1/4 each) |
+| anxious / worried / scared (不安, 心配, 怖 …) | R03 / R09 / R10 / R12 (1/4 each) |
+| lonely (寂, 孤独, しゅん) | R01 / R02 / R05 / R06 / R16 (1/5 each) |
+| happy / fun / glad (嬉, 楽し, 良かった …) | R14 |
+| angry / irritated (怒, イラ, むか …) | R11 / R12 (1/2 each) |
+| anything else | R04 / R13 (1/2 each) |
 
-The regular expression used by `detectEmotionNeed()` is:
-
-```js
-/嬉|うれし|楽し|良かった|よかった|ご機嫌|ラッキー/
-```
-
-Thus, kanji and hiragana spelling variations produce the same rabbit reaction.
-
-If no emotion rule matches, the default is `pleasant` with Need `companionship`, resulting in R04 “じっと隣で見守る”.
+If an entry contains several feeling words, the first matching row (from the top of this table down to "angry") is used. If several candidates are available, the selector chooses evenly from all candidates (fixed in v1.3.3). Saved entries keep their original reaction (`actionId`).
 
 Processing flow:
 
@@ -244,17 +236,18 @@ The v1.3.1 emotion-recognition fix applies to newly saved diary entries; existin
 
 ## 📦 9. Release Information
 
-- **Version:** v1.3.2
-- **Previous version:** v1.3.1
-- **Release type:** Documentation / Presentation Update
-- **Main change:** Updated README.md and README_EN.md, and added cross-links between them, the home screen screenshot, and the YouTube demo link. The application itself is unchanged from v1.3.1.
-- **Application:** Keeps the v1.3.1 emotion-detection fix and all features up to v1.3.0 (including R22 and R23)
-- **Print support:** `print_image` design retained
+- **Version:** v1.3.3
+- **Previous version:** v1.3.2
+- **Release type:** Feature / Fix
+- **Main changes:** Expanded diary reactions; the selector now chooses from all candidates; video-based actions (e.g. R08) now use still images in diary thumbnails, details and printing/PDF.
+- **Behavior:** All 23 Rabbit Actions can now appear from the diary, Direct Talk, or idle behavior.
+- **Artwork:** All rabbit images and videos were created with generative AI.
 - **Developer:** usakowhity
 - **License:** MIT
 
 ### Version History
 
+- **v1.3.3:** Expanded diary reactions for tiredness, sadness, anxiety, loneliness, anger and the default case, so all 23 Rabbit Actions can now appear. The selector now chooses from all candidates. Video-based actions (e.g. R08) now use their still images for diary thumbnails and printing.
 - **v1.3.2:** Improved README files, home screen image, YouTube demo link, and Japanese/English README cross-links (Documentation / Presentation Update)
 - **v1.3.1:** Fixed Japanese spelling variations such as “うれしい” and “良かった” in joy detection
 - **v1.3.0:** Added Direct Talk R22 “Walk / Outside” and R23 “Congratulations / Happy Birthday”

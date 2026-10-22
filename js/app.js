@@ -81,8 +81,19 @@ function getActionImagePath(actionId) {
 
     const action = rabbitActions[actionId];
 
-    if (action && action.image) {
-        return `./${action.image.replace(/^\.?\//, "")}`;
+    if (action) {
+        // 静止画が必要な場所（日記サムネール・日記詳細・印刷/PDF）用。
+        // print_image を優先し、なければ image を使う。
+        // image が動画（.mp4）の場合は、同名の .png を静止画として使う。
+        const source = action.print_image || action.image;
+
+        if (source) {
+            const stillPath = /\.mp4$/i.test(source)
+                ? source.replace(/\.mp4$/i, ".png")
+                : source;
+
+            return `./${stillPath.replace(/^\.?\//, "")}`;
+        }
     }
 
     // JSON に画像パスがない場合の互換用フォールバック
