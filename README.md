@@ -6,7 +6,7 @@
 >
 > [![PetApp6 Home Screen](docs/images/petapp6-main.png)](https://usakowhity.github.io/PetApp6/)
 >
-> 🎬 **[YouTubeでPetApp6のデモを見る](https://www.youtube.com/shorts/ECOsiTvbqI8)**
+> 🎬 **[YouTubeでPetApp6のデモを見る](https://www.youtube.com/shorts/wOnqnhPHTJA)**
 
 PetApp6 は、PetApp5 v3.2.7
 の機能・ファイル構成・世界観を継承し、その上に日記帳機能を追加したアプリです。
@@ -534,7 +534,7 @@ PetApp6は差分追加型で開発します。
     -   ⚡ **Vercel Mirror (Fast Mirror):** https://petapp6.vercel.app/
     -   🌿 **Netlify Portal:** https://petapp6.netlify.app/
 -   **GitHubリポジトリ：** https://github.com/usakowhity/PetApp6
--   **YouTubeデモ：** https://www.youtube.com/shorts/ECOsiTvbqI8
+-   **YouTubeデモ：** https://www.youtube.com/shorts/wOnqnhPHTJA
 
 ### バージョン履歴
 

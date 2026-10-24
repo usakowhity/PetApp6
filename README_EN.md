@@ -6,7 +6,7 @@
 >
 > [![PetApp6 Home Screen](docs/images/petapp6-main.png)](https://usakowhity.github.io/PetApp6/)
 >
-> 🎬 **[Watch the PetApp6 demo on YouTube](https://www.youtube.com/shorts/ECOsiTvbqI8)**
+> 🎬 **[Watch the PetApp6 demo on YouTube](https://www.youtube.com/shorts/wOnqnhPHTJA)**
 
 > **Language note:** PetApp6 v1 is a Japanese-language app. The interface, speech recognition, Direct Talk trigger words and diary keyword rules are all in Japanese, so English phrases such as "Leo, good morning" will not trigger reactions. English translations in this document are for reference only.
 
@@ -281,7 +281,7 @@ Diary text and reactions are stored only in your browser. The app's code loads n
 - **Vercel (Fast Mirror):** https://petapp6.vercel.app/
 - **Netlify (Portal):** https://petapp6.netlify.app/
 - **GitHub Repository:** https://github.com/usakowhity/PetApp6
-- **YouTube Demo:** https://www.youtube.com/shorts/ECOsiTvbqI8
+- **YouTube Demo:** https://www.youtube.com/shorts/wOnqnhPHTJA
 
 ---
 
