@@ -1,4 +1,4 @@
-# 🐇 PetApp6 v1.3.3 - Healing Rabbit Diary
+# 🐇 PetApp6 v1.3.4 - Healing Rabbit Diary
 
 [🇯🇵 Japanese Version (README.md)](README.md)
 
@@ -20,7 +20,9 @@ v1.3.2 improved the README files (home screen image, YouTube demo link, Japanese
 
 **v1.3.3 expands the rabbit's reactions to diary entries so that all 23 Rabbit Actions (R01–R23) can appear from the diary, Direct Talk or the idle behavior.** It also fixes video-based actions (such as R08) so that diary thumbnails, diary details and printed/PDF diaries use still images (PNG).
 
-All rabbit images and videos in PetApp6 were created with generative AI.
+**v1.3.4 stops using video (MP4) entirely: every rabbit is now a still image (PNG).** It also adds alternative images for R08, R15 and R19 (R08-1, R15-1, R19-1) that are shown at random. In the idle behavior, meal times pick from four images (R17, R18, R19, R19-1), daytime from R08 / R08-1, and night from R15 / R15-1.
+
+All rabbit images in PetApp6 were created with generative AI. The code (`js/`, `data/`, `css/`, `index.html`) is under the MIT license, but the images in `assets/` are not covered by it. Please do not reuse or redistribute them.
 
 ---
 
@@ -38,7 +40,7 @@ PetApp6 extends PetApp5 rather than replacing it. Existing functionality, module
 - Diary editing and deletion
 - Printable diary book with thumbnails / PDF saving
 - Rabbit Action R01-R23
-- MP4-based Rabbit Action playback
+- Random display of alternative PNG images (R08, R15, R19, idle behavior)
 - Static print images for diary list/detail and printing
 - Time-based Idle Layer
 - Diary reactions chosen at random from several candidates per feeling
@@ -163,44 +165,50 @@ To add feeling words, edit the regular expressions in `detectEmotionNeed()`. To 
 
 ## 🖼️ 4. Rabbit Action Media Design
 
-Rabbit Actions use two media roles.
+Since v1.3.4, PetApp6 uses **no video (MP4) at all — only still images (PNG)**.
 
 ### `image`
 
-The normal interaction media used by Direct Talk, Diary Reaction, and Idle Layer. It can be PNG or MP4.
+The representative image of an action. It is used when the rabbit is shown, and also for diary thumbnails, diary details, and printing / PDF export.
 
-### `print_image`
+### `variants` (optional)
 
-The static representative image used for:
-
-- Diary thumbnails
-- Diary details
-- Printed diary books
-- PDF output
-
-MP4-based actions therefore have a corresponding PNG for printing.
-
-Example:
+An array of alternative images for the same action. When an action has `variants`, one image is picked at random from `image` and `variants` each time the rabbit is shown. Diary thumbnails, diary details and printing / PDF always use the representative `image`.
 
 ```json
 {
   "id": "R08",
-  "name": "ごろんと安心する",
-  "image": "assets/rabbit/actions/R08.mp4",
-  "print_image": "assets/rabbit/actions/R08.png"
+  "image": "assets/rabbit/actions/R08.png",
+  "variants": ["assets/rabbit/actions/R08-1.png"]
 }
 ```
 
-Current MP4 actions with print images:
+### Actions with more than one image
 
-- R08 → R08.mp4 / R08.png
-- R17 → R17.mp4 / R17.png
-- R18 → R18.mp4 / R18.png
-- R19 → R19.mp4 / R19.png
+| Action | Images |
+|---|---|
+| R08 | R08.png / R08-1.png |
+| R15 | R15.png / R15-1.png |
+| R19 | R19.png / R19-1.png |
 
-### v1.3.3 implementation note
+### Idle Layer images
 
-`print_image` entries (PNG files) were added for R08, R17, R18 and R19 in `rabbit_actions.json`, and `getActionImagePath()` in `app.js` now prefers `print_image` (falling back to the PNG with the same name for video actions). Diary thumbnails, diary details and printing/PDF use this still image, while the normal rabbit display (`uiRenderer.js`) keeps using `image` (PNG or MP4).
+The idle display changes every 20 seconds and picks **one image at random, each with the same probability**, from the images for the time of day:
+
+| Time of day | Images |
+|---|---|
+| Morning (6–10) and evening (16–20): meals | R17.png / R18.png / R19.png / R19-1.png |
+| Daytime (10–16) | R08.png / R08-1.png |
+| Night (20–6) | R15.png / R15-1.png |
+
+Direct Talk and diary reactions also show one of the two images at random when R08, R15 or R19 is chosen.
+
+### v1.3.4 changes
+
+- Stopped using video (MP4); every action is now a still image (R08, R17, R18, R19)
+- Removed `print_image` (`image` is always a still image now)
+- Added `variants` so that R08 (R08-1), R15 (R15-1) and R19 (R19-1) show alternative images at random
+- Idle selection is now a uniform draw over individual images
 
 ---
 
@@ -227,10 +235,9 @@ PetApp6/
    └─ rabbit/
       └─ actions/
          ├─ R01.png ... R23.png
-         ├─ R08.mp4
-         ├─ R17.mp4
-         ├─ R18.mp4
-         └─ R19.mp4
+         ├─ R08-1.png
+         ├─ R15-1.png
+         └─ R19-1.png
 ```
 
 ---
@@ -242,9 +249,9 @@ PetApp6/
 3. Press **Print / Save PDF**.
 4. Use the browser print dialog to print or select **Save as PDF**.
 
-No external PDF library is required. Print output uses `print_image` rather than MP4 media.
+No external PDF library is required. Print output uses the representative `image` (PNG) of each action.
 
-In v1.3.3, video-based actions such as R08 (which can be chosen for tired diary entries) are shown as still images in the printed/PDF diary.
+Since v1.3.4 no video is used, so every action that can be saved in a diary is a still image.
 
 ---
 
@@ -280,23 +287,22 @@ Diary text and reactions are stored only in your browser. The app's code loads n
 
 ## 📦 9. Release Information
 
-- **Version:** v1.3.3
-- **Previous version:** v1.3.2
-- **Release type:** Feature / Fix
+- **Version:** v1.3.4
+- **Previous version:** v1.3.3
+- **Release type:** Feature / Maintenance
 - **Main changes:**
-  - Expanded diary reactions (tired, sad, anxious, lonely, angry, and the default case)
-  - The selector now chooses from all candidates with equal probability (previously only the first three)
-  - Video-based actions (e.g. R08) now use still images (PNG) in diary thumbnails, diary details and printing/PDF
-  - All Rabbit Actions R01–R23 can now appear from the diary, Direct Talk or the idle behavior
-  - README now documents the already-implemented trigger words (いいね / いいこ) and states that the app is Japanese-language
+  - Stopped using video (MP4); all actions are now still images (PNG)
+  - Added alternative images for R08, R15 and R19 (R08-1, R15-1, R19-1), shown at random
+  - Idle behavior now draws uniformly over individual images (four at meal times)
+  - Clarified that the images in `assets/` are not covered by the MIT license
 - **Compatibility:** Existing diary data (`localStorage`, `actionId`) keeps working without migration
-- **Verification:** Still-image display in the diary list, diary details and PDF export, and video display of R08, were checked
-- **Images and videos:** All created with generative AI
+- **Images:** All created with generative AI
 - **Developer:** usakowhity
-- **License:** MIT
+- **License:** Code: MIT. Images: not covered by the MIT license
 
 ### Version History
 
+- **v1.3.4:** Stopped using video (MP4); random alternative images for R08, R15 and R19; uniform idle image selection
 - **v1.3.3:** Expanded diary reactions, fixed the selector (all candidates are eligible), fixed still-image display for video-based actions, and made all of R01–R23 reachable
 - **v1.3.2:** Improved README files, home screen image, YouTube demo link, and Japanese/English README cross-links (Documentation / Presentation Update)
 - **v1.3.1:** Fixed Japanese spelling variations such as “うれしい” and “良かった” in joy detection
@@ -323,7 +329,7 @@ PetApp6 follows an additive development policy:
 
 ## 📄 License
 
-MIT License. See the `LICENSE` file for details.
+MIT License. See the `LICENSE` file for details. This applies to the code; the images in `assets/` are not covered by it.
 
 ---
 

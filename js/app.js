@@ -74,6 +74,22 @@ function getDiaryText() {
     return textarea ? textarea.value.trim() : "";
 }
 
+// 表示用の画像候補（image + variants）。variants がなければ image だけ。
+function getImageChoices(action) {
+    return [action.image, ...(action.variants || [])].filter(Boolean);
+}
+
+// 画像が複数あるアクションは、表示のたびにランダムな1枚を選ぶ。
+function withRandomImage(action) {
+    const choices = getImageChoices(action);
+
+    if (choices.length <= 1) {
+        return action;
+    }
+
+    return { ...action, image: randomPick(choices) };
+}
+
 function getActionImagePath(actionId) {
     if (!actionId) {
         return null;
@@ -83,16 +99,11 @@ function getActionImagePath(actionId) {
 
     if (action) {
         // 静止画が必要な場所（日記サムネール・日記詳細・印刷/PDF）用。
-        // print_image を優先し、なければ image を使う。
-        // image が動画（.mp4）の場合は、同名の .png を静止画として使う。
+        // 常に固定の代表画像（image）を使う。
         const source = action.print_image || action.image;
 
         if (source) {
-            const stillPath = /\.mp4$/i.test(source)
-                ? source.replace(/\.mp4$/i, ".png")
-                : source;
-
-            return `./${stillPath.replace(/^\.?\//, "")}`;
+            return `./${source.replace(/^\.?\//, "")}`;
         }
     }
 
@@ -205,7 +216,7 @@ function startSpeechRecognition() {
         const phrase = randomPick(action.short_phrases);
 
         currentActionId = actionId;
-        renderRabbit(action, phrase);
+        renderRabbit(withRandomImage(action), phrase);
     };
 
     recognition.onerror = (event) => {
@@ -394,7 +405,7 @@ async function processDiary() {
         return;
     }
 
-    renderRabbit(result.action, result.chosenPhrase || "");
+    renderRabbit(withRandomImage(result.action), result.chosenPhrase || "");
 
     const textarea = document.getElementById("diary-input");
 
@@ -958,7 +969,23 @@ async function startIdleLoop() {
             candidates = ["R15"];
         }
 
-        return rabbitActions[randomPick(candidates)];
+        // 候補アクションの画像をすべて並べ、画像1枚ごとに同じ確率で選ぶ。
+        // 朝夕：R17・R18・R19・R19-1 の4枚 / 昼：R08・R08-1 / 夜：R15・R15-1
+        const pool = [];
+
+        candidates.forEach((id) => {
+            const action = rabbitActions[id];
+
+            if (!action) {
+                return;
+            }
+
+            getImageChoices(action).forEach((image) => {
+                pool.push({ ...action, image });
+            });
+        });
+
+        return pool.length > 0 ? randomPick(pool) : null;
     }
 
     function showIdle() {
