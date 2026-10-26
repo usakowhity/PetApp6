@@ -1,4 +1,4 @@
-# 🐇 PetApp6 v1.3.4 - Healing Rabbit Diary
+# 🐇 PetApp6 v1.3.5 - Healing Rabbit Diary
 
 [🇯🇵 Japanese Version (README.md)](README.md)
 
@@ -20,9 +20,20 @@ v1.3.2 improved the README files (home screen image, YouTube demo link, Japanese
 
 **v1.3.3 expands the rabbit's reactions to diary entries so that all 23 Rabbit Actions (R01–R23) can appear from the diary, Direct Talk or the idle behavior.** It also fixes video-based actions (such as R08) so that diary thumbnails, diary details and printed/PDF diaries use still images (PNG).
 
-**v1.3.4 stops using video (MP4) entirely: every rabbit is now a still image (PNG).** It also adds alternative images for R08, R15 and R19 (R08-1, R15-1, R19-1) that are shown at random. In the idle behavior, meal times pick from four images (R17, R18, R19, R19-1), daytime from R08 / R08-1, and night from R15 / R15-1.
+**v1.3.4 reviewed the terms of the tools used for the artwork, stopped using the videos used until then, and made every rabbit a still image (PNG).** It also added alternative images for R08, R15 and R19 (R08-1, R15-1, R19-1) that are shown at random.
 
-All rabbit images in PetApp6 were created with generative AI. The code (`js/`, `data/`, `css/`, `index.html`) is under the MIT license, but the images in `assets/` are not covered by it. Please do not reuse or redistribute them.
+**v1.3.5 adds videos with sound for R17 (hay), R18 (drinking water) and R19 (eating).** They play in the idle behavior at meal times and when those actions are triggered. Sound is off by default and can be switched with the small 🔇 / 🔊 button at the bottom right while a video is shown. If a video cannot be played, the still image (PNG) is shown instead.
+
+**The rabbit now follows a natural daily rhythm.** Rabbits are said to be most active around dawn and dusk. The idle behavior in v1.3.5 reflects this: quiet still images at midday and at night, and lively videos with sound at meal times in the morning and evening.
+
+| Time of day | What the rabbit does |
+|---|---|
+| Morning (6–10) | Eating (video with sound: hay, water, food) |
+| Daytime (10–16) | Resting quietly (still image) |
+| Evening (16–20) | Eating (video with sound: hay, water, food) |
+| Night (20–6) | Sleeping (still image) |
+
+All rabbit images and videos in PetApp6 were created with generative AI (images with ChatGPT; the videos for R17, R18 and R19 with Google Flow / Veo 3.1 Lite). The code (`js/`, `data/`, `css/`, `index.html`) is under the MIT license, but the images and videos in `assets/` are not covered by it. Please do not reuse or redistribute them.
 
 ---
 
@@ -40,7 +51,8 @@ PetApp6 extends PetApp5 rather than replacing it. Existing functionality, module
 - Diary editing and deletion
 - Printable diary book with thumbnails / PDF saving
 - Rabbit Action R01-R23
-- Random display of alternative PNG images (R08, R15, R19, idle behavior)
+- Random display of alternative PNG images (R08, R15, idle behavior)
+- Videos with sound for R17, R18 and R19, with a sound on/off button (off by default)
 - Static print images for diary list/detail and printing
 - Time-based Idle Layer
 - Diary reactions chosen at random from several candidates per feeling
@@ -165,15 +177,27 @@ To add feeling words, edit the regular expressions in `detectEmotionNeed()`. To 
 
 ## 🖼️ 4. Rabbit Action Media Design
 
-Since v1.3.4, PetApp6 uses **no video (MP4) at all — only still images (PNG)**.
+Rabbit Actions are based on still images (PNG), and individual actions can add a video (MP4).
 
 ### `image`
 
-The representative image of an action. It is used when the rabbit is shown, and also for diary thumbnails, diary details, and printing / PDF export.
+The representative image (PNG) of an action. It is used when the rabbit is shown, for diary thumbnails, diary details, and printing / PDF export, and as the replacement when a video cannot be played.
+
+### `video` (optional)
+
+The video (MP4) of an action. When an action has `video`, the rabbit is shown as a video. If the video cannot be played, `image` (PNG) is shown instead. Diary thumbnails, diary details and printing / PDF never use videos; they use `image`.
+
+```json
+{
+  "id": "R18",
+  "image": "assets/rabbit/actions/R18.png",
+  "video": "assets/rabbit/actions/R18.mp4"
+}
+```
 
 ### `variants` (optional)
 
-An array of alternative images for the same action. When an action has `variants`, one image is picked at random from `image` and `variants` each time the rabbit is shown. Diary thumbnails, diary details and printing / PDF always use the representative `image`.
+An array of alternative still images for the same action. When an action has `variants`, one image is picked at random from `image` and `variants` each time the rabbit is shown. Actions that have a `video` ignore `variants`, because a still image in between videos looks like the rabbit froze.
 
 ```json
 {
@@ -183,32 +207,41 @@ An array of alternative images for the same action. When an action has `variants
 }
 ```
 
-### Actions with more than one image
+### What is shown for each action
 
-| Action | Images |
+| Action | Display |
 |---|---|
-| R08 | R08.png / R08-1.png |
-| R15 | R15.png / R15-1.png |
-| R19 | R19.png / R19-1.png |
+| R17 (hay), R18 (drinking water), R19 (eating) | Video (R17.mp4 / R18.mp4 / R19.mp4); PNG if the video cannot be played |
+| R08 | R08.png or R08-1.png at random |
+| R15 | R15.png or R15-1.png at random |
+| All others | PNG |
 
-### Idle Layer images
+R19-1.png is kept as an alternative image in case the R19 video is not used.
 
-The idle display changes every 20 seconds and picks **one image at random, each with the same probability**, from the images for the time of day:
+### Idle Layer
 
-| Time of day | Images |
+The idle display changes every 20 seconds and picks one of the following with equal probability:
+
+| Time of day | Display |
 |---|---|
-| Morning (6–10) and evening (16–20): meals | R17.png / R18.png / R19.png / R19-1.png |
+| Morning (6–10) and evening (16–20): meals | Videos of R17, R18, R19 (1/3 each) |
 | Daytime (10–16) | R08.png / R08-1.png |
 | Night (20–6) | R15.png / R15-1.png |
 
-Direct Talk and diary reactions also show one of the two images at random when R08, R15 or R19 is chosen.
+Direct Talk and diary reactions also show one of the two images at random when R08 or R15 is chosen. R17, R18 and R19 are shown as videos.
 
-### v1.3.4 changes
+### Sound
 
-- Stopped using video (MP4); every action is now a still image (R08, R17, R18, R19)
-- Removed `print_image` (`image` is always a still image now)
-- Added `variants` so that R08 (R08-1), R15 (R15-1) and R19 (R19-1) show alternative images at random
-- Idle selection is now a uniform draw over individual images
+- The videos contain sound. **Sound is off (muted) by default.**
+- While a video is shown, a small button appears at the bottom right of the rabbit area. Press 🔇 to turn the sound on (🔊); press it again to turn it off.
+- The sound setting is saved in your browser.
+- Because of browser rules, sound may not play until you have interacted with the page at least once.
+- With sound on, Direct Talk speech recognition may pick up the video's sound. Turn the sound off if that happens.
+
+### History
+
+- v1.3.4: Stopped using video and unified on still images (PNG); removed `print_image`, added `variants`
+- v1.3.5: Added `video` and reintroduced videos with sound for R17, R18 and R19. `image` is always a PNG, used as the replacement when a video fails, for thumbnails and for printing / PDF
 
 ---
 
@@ -236,6 +269,9 @@ PetApp6/
       └─ actions/
          ├─ R01.png ... R23.png
          ├─ R08-1.png
+         ├─ R17.mp4
+         ├─ R18.mp4
+         ├─ R19.mp4
          ├─ R15-1.png
          └─ R19-1.png
 ```
@@ -251,7 +287,7 @@ PetApp6/
 
 No external PDF library is required. Print output uses the representative `image` (PNG) of each action.
 
-Since v1.3.4 no video is used, so every action that can be saved in a diary is a still image.
+Videos (R17, R18, R19) are not used for printing: diary thumbnails, details and PDF output always use the representative `image` (PNG).
 
 ---
 
@@ -287,21 +323,23 @@ Diary text and reactions are stored only in your browser. The app's code loads n
 
 ## 📦 9. Release Information
 
-- **Version:** v1.3.4
-- **Previous version:** v1.3.3
-- **Release type:** Feature / Maintenance
+- **Version:** v1.3.5
+- **Previous version:** v1.3.4
+- **Release type:** Feature
 - **Main changes:**
-  - Stopped using video (MP4); all actions are now still images (PNG)
-  - Added alternative images for R08, R15 and R19 (R08-1, R15-1, R19-1), shown at random
-  - Idle behavior now draws uniformly over individual images (four at meal times)
-  - Clarified that the images in `assets/` are not covered by the MIT license
+  - Added videos with sound for R17 (hay), R18 (water) and R19 (eating)
+  - Sound is off by default; switch it with the button at the bottom right while a video is shown (saved in the browser)
+  - If a video cannot be played, the still image (PNG) is shown automatically
+  - Meal-time idle behavior now picks from the R17 / R18 / R19 videos
+  - Clarified that the images and videos in `assets/` are not covered by the MIT license
 - **Compatibility:** Existing diary data (`localStorage`, `actionId`) keeps working without migration
-- **Images:** All created with generative AI
+- **Images and videos:** All created with generative AI (videos: Google Flow / Veo 3.1 Lite)
 - **Developer:** usakowhity
-- **License:** Code: MIT. Images: not covered by the MIT license
+- **License:** Code: MIT. Images and videos: not covered by the MIT license
 
 ### Version History
 
+- **v1.3.5:** Added videos with sound (Google Flow) for R17, R18 and R19; sound is off by default with an on/off button; PNG fallback if a video cannot be played
 - **v1.3.4:** Stopped using video (MP4); random alternative images for R08, R15 and R19; uniform idle image selection
 - **v1.3.3:** Expanded diary reactions, fixed the selector (all candidates are eligible), fixed still-image display for video-based actions, and made all of R01–R23 reachable
 - **v1.3.2:** Improved README files, home screen image, YouTube demo link, and Japanese/English README cross-links (Documentation / Presentation Update)

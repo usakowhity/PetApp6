@@ -75,8 +75,25 @@ function getDiaryText() {
 }
 
 // 表示用の画像候補（image + variants）。variants がなければ image だけ。
+// video があるアクションは動画で表示するため、静止画の別画像（variants）は使わない
+// （動画の合間に静止画が出ると、止まって見えて不自然なため）。
 function getImageChoices(action) {
+    if (action.video) {
+        return [action.image].filter(Boolean);
+    }
+
     return [action.image, ...(action.variants || [])].filter(Boolean);
+}
+
+// 表示用のアクションを作る。video は代表画像（image）のときだけ付ける。
+function makeDisplayAction(action, image) {
+    const display = { ...action, image };
+
+    if (image !== action.image) {
+        delete display.video;
+    }
+
+    return display;
 }
 
 // 画像が複数あるアクションは、表示のたびにランダムな1枚を選ぶ。
@@ -87,7 +104,7 @@ function withRandomImage(action) {
         return action;
     }
 
-    return { ...action, image: randomPick(choices) };
+    return makeDisplayAction(action, randomPick(choices));
 }
 
 function getActionImagePath(actionId) {
@@ -981,7 +998,7 @@ async function startIdleLoop() {
             }
 
             getImageChoices(action).forEach((image) => {
-                pool.push({ ...action, image });
+                pool.push(makeDisplayAction(action, image));
             });
         });
 
