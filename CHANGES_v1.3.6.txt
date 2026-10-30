@@ -1,0 +1,26 @@
+PetApp6 v1.3.6 変更点と手順
+===========================
+
+上書きするファイル（リポジトリの同じ場所）
+  js/app.js                  Direct Talk の表記ゆれ（ご飯・お休み・お腹・お家・お外・さんぽ・いい子 など）、
+                             PDF保存の初期ファイル名に日付（印刷の間だけ document.title を変更し、終了後に戻す）
+  README.md / README_EN.md   辞書の表、PDF保存・日記の保存先の説明、リリース情報を v1.3.6 に更新
+
+リリースノート（GitHub Releases の本文用）
+  RELEASE_NOTES_v1.3.6_bilingual.md
+
+変更しないファイル（index.html は v1.3.5 で直したフッターのREADMEリンク版のまま）
+  css/style.css, js/uiRenderer.js, js/rabbitActionSelector.js, js/dataLoader.js, js/diaryStorage.js,
+  data/*.json, assets/（v1.3.5 のまま）
+
+コミット例
+  git add -A
+  git commit -m "v1.3.6: Direct Talk spelling variants, dated PDF file name, README storage notes"
+  git push
+  git tag v1.3.6 && git push origin v1.3.6
+
+動作確認
+  1) 「レオ、ご飯」「レオ、お休み」「レオ、お腹空いた」などで反応すること
+  2) 「🖨️ 印刷／PDF保存」を押し、保存画面の初期ファイル名が「癒しウサギの日記帳_日付」になること
+  3) 保存後、ブラウザのタブの名前が元に戻っていること
+  4) 公開サイト（Pages / Vercel / Netlify）で Ctrl+Shift+R で再読み込みして確認

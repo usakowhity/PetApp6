@@ -1,4 +1,4 @@
-# 🐇 PetApp6 v1.3.5 - Healing Rabbit Diary
+# 🐇 PetApp6 v1.3.6 - Healing Rabbit Diary
 
 [🇯🇵 Japanese Version (README.md)](README.md)
 
@@ -32,6 +32,8 @@ v1.3.2 improved the README files (home screen image, YouTube demo link, Japanese
 | Daytime (10–16) | Resting quietly (still image) |
 | Evening (16–20) | Eating (video with sound: hay, water, food) |
 | Night (20–6) | Sleeping (still image) |
+
+**v1.3.6 makes Direct Talk handle spelling variants.** Speech recognition may return the same word in hiragana or kanji (for example ごはん or ご飯). Saying "レオ、ご飯" now works. The default file name when saving a PDF now includes the date (for example `癒しウサギの日記帳_2026-10-30`).
 
 All rabbit images and videos in PetApp6 were created with generative AI (images with ChatGPT; the videos for R17, R18 and R19 with Google Flow / Veo 3.1 Lite). The code (`js/`, `data/`, `css/`, `index.html`) is under the MIT license, but the images and videos in `assets/` are not covered by it. Please do not reuse or redistribute them.
 
@@ -83,22 +85,24 @@ The pet name is fully customizable.
 
 ### Direct Talk Dictionary
 
+Speech recognition does not always return a word in the same script (hiragana, kanji or katakana). Every spelling listed below works (spelling variants supported since v1.3.6).
+
 | Say (Japanese) | Meaning | Action ID | Reaction |
 |---|---|---|---|
-| おはよう | Good morning | R10 | Morning greeting |
+| おはよう / お早う | Good morning | R10 | Morning greeting |
 | 元気 | How are you? | R11 | Checking condition |
-| かわいい / 可愛い / カワイイ / いいこ / おりこう / お利口 | Cute / good bunny | R14 | Joy reaction |
-| おやすみ | Good night | R15 | Rest |
-| ねんね | Sleepy time | R08 | Sleeping reaction |
+| かわいい / 可愛い / カワイイ / いいこ / いい子 / 良い子 / おりこう / お利口 | Cute / good bunny | R14 | Joy reaction |
+| おやすみ / お休み | Good night | R15 | Rest |
+| ねんね / ネンネ | Sleepy time | R08 | Sleeping reaction |
 | おいで | Come here | R16 | Response to calling |
-| ごはん | Food | R19 | Eating |
+| ごはん / ご飯 / ゴハン / 御飯 | Food | R19 | Eating |
 | 牧草 / チモシー | Hay / timothy | R17 | Eating hay |
 | 水 / お水 | Water | R18 | Drinking |
-| お腹すいた | I'm hungry | R03 | Hungry reaction |
+| お腹 / おなか / すいた / 空いた (e.g. お腹すいた) | I'm hungry | R03 | Hungry reaction |
 | トイレ / おしっこ / ちっち / シー | Toilet | R20 | Toilet reaction |
-| ハウス / おうち | House | R21 | Entering the house |
-| 散歩 / おそと | Walk / outside | R22 | Going outside |
-| おめでとう / ハッピーバースデー | Congratulations / happy birthday | R23 | Celebration |
+| ハウス / おうち / お家 | House | R21 | Entering the house |
+| 散歩 / さんぽ / サンポ / おそと / お外 | Walk / outside | R22 | Going outside |
+| おめでとう / ハッピーバースデー / バースデー / 誕生日 | Congratulations / happy birthday | R23 | Celebration |
 
 ---
 
@@ -289,6 +293,15 @@ No external PDF library is required. Print output uses the representative `image
 
 Videos (R17, R18, R19) are not used for printing: diary thumbnails, details and PDF output always use the representative `image` (PNG).
 
+The default file name when saving a PDF includes the date, e.g. `癒しウサギの日記帳_YYYY-MM-DD` (since v1.3.6; some browsers may not apply it).
+
+### About saving PDFs
+
+- A PDF contains **all diary entries at the time you save it** (oldest first).
+- Saving again later creates a **new PDF** that includes newer entries. PDFs you saved earlier do not change.
+- The save location and file name are chosen in the browser's save dialog. What happens when a file with the same name already exists in the same place (overwrite or rename) depends on the browser and OS. Since v1.3.6 the default name includes the date.
+- Saving from a different site or browser produces a different PDF, because diary data is stored separately (see "Data Storage" below).
+
 ---
 
 ## 💾 7. Data Storage
@@ -307,6 +320,16 @@ The v1.3.1 emotion-recognition fix applies to newly saved diary entries; existin
 
 The expanded reactions in v1.3.3 also apply only to newly saved entries.
 
+### Where your diary is stored (important)
+
+Your diary is stored **only inside your own browser**. The storage is separate for each combination of:
+
+- the site address (GitHub Pages, Vercel, Netlify and a local VS Code Live Server are all different)
+- the browser (for example Chrome vs Edge) and browser profile
+- the device (for example PC vs phone)
+
+If you switch sites or devices, your diary does not carry over. Clearing the browser's site data also deletes the diary and cannot be undone. To keep a diary, save it with **Print / Save PDF**. Choosing one site to use regularly keeps your entries in one place.
+
 Diary text and reactions are stored only in your browser. The app's code loads nothing outside its own files and does not send your diary anywhere. Direct Talk uses your browser's built-in speech recognition, which in some browsers may process audio on the browser vendor's servers.
 
 ---
@@ -323,11 +346,14 @@ Diary text and reactions are stored only in your browser. The app's code loads n
 
 ## 📦 9. Release Information
 
-- **Version:** v1.3.5
-- **Previous version:** v1.3.4
-- **Release type:** Feature
+- **Version:** v1.3.6
+- **Previous version:** v1.3.5
+- **Release type:** Fix / Improvement
 - **Main changes:**
-  - Added videos with sound for R17 (hay), R18 (water) and R19 (eating)
+  - Direct Talk now handles spelling variants in hiragana, kanji and katakana (e.g. ご飯, お休み, お腹)
+  - The default PDF file name now includes the date
+  - Documented where diaries are stored and how PDF saving works
+  - (v1.3.5) Added videos with sound for R17 (hay), R18 (water) and R19 (eating)
   - Sound is off by default; switch it with the button at the bottom right while a video is shown (saved in the browser)
   - If a video cannot be played, the still image (PNG) is shown automatically
   - Meal-time idle behavior now picks from the R17 / R18 / R19 videos
@@ -339,6 +365,7 @@ Diary text and reactions are stored only in your browser. The app's code loads n
 
 ### Version History
 
+- **v1.3.6:** Direct Talk handles spelling variants (ご飯, お休み, …); the default PDF file name includes the date; documented diary storage and PDF saving
 - **v1.3.5:** Added videos with sound (Google Flow) for R17, R18 and R19; sound is off by default with an on/off button; PNG fallback if a video cannot be played
 - **v1.3.4:** Stopped using video (MP4); random alternative images for R08, R15 and R19; uniform idle image selection
 - **v1.3.3:** Expanded diary reactions, fixed the selector (all candidates are eligible), fixed still-image display for video-based actions, and made all of R01–R23 reachable

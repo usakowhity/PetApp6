@@ -255,23 +255,26 @@ function detectDirectTalkAction(text) {
         .replace(/^[、,，\s]+/, "")
         .replace(/[。！!？?\s]+$/, "");
 
+    // 音声認識は、同じ言葉をひらがな・漢字・カタカナのどれで返すか一定しない
+    // （例：「ごはん」→「ご飯」、「おやすみ」→「お休み」）。表記ゆれをまとめて扱う。
+
     // あいさつ
-    if (normalizedText.includes("おはよう")) return "R10";
+    if (/おはよう|おはよ$|お早う/.test(normalizedText)) return "R10";
     if (normalizedText.includes("元気")) return "R11";
 
     // 喜び・休息
-    if (/かわいい|可愛い|カワイイ|いいこ|おりこう|お利口/.test(normalizedText)) {
+    if (/かわいい|可愛い|カワイイ|いいこ|いい子|良い子|おりこう|お利口/.test(normalizedText)) {
         return "R14";
     }
 
-    if (normalizedText.includes("おやすみ")) return "R15";
-    if (normalizedText.includes("ねんね")) return "R08";
+    if (/おやすみ|お休み/.test(normalizedText)) return "R15";
+    if (/ねんね|ネンネ/.test(normalizedText)) return "R08";
 
     // 呼びかけ
     if (normalizedText.includes("おいで")) return "R16";
 
     // 食べ物
-    if (normalizedText.includes("ごはん")) return "R19";
+    if (/ごはん|ご飯|ゴハン|御飯/.test(normalizedText)) return "R19";
     if (normalizedText.includes("牧草") || normalizedText.includes("チモシー")) {
         return "R17";
     }
@@ -282,7 +285,7 @@ function detectDirectTalkAction(text) {
     }
 
     // お腹が空いた
-    if (normalizedText.includes("お腹") || normalizedText.includes("すいた")) {
+    if (/お腹|おなか|すいた|空いた/.test(normalizedText)) {
         return "R03";
     }
 
@@ -299,17 +302,17 @@ function detectDirectTalkAction(text) {
     }
 
     // ハウス(R21)
-    if (normalizedText.includes("ハウス") || normalizedText.includes("おうち")) {
+    if (/ハウス|おうち|お家/.test(normalizedText)) {
         return "R21";
     }
 
     // 散歩 (R22)
-    if (normalizedText.includes("散歩") || normalizedText.includes("おそと")) {
+    if (/散歩|さんぽ|サンポ|おそと|お外/.test(normalizedText)) {
         return "R22";
     }
 
     // お祝い (R23)
-    if (normalizedText.includes("おめでとう") || normalizedText.includes("ハッピーバースデー")) {
+    if (/おめでとう|ハッピーバースデー|バースデー|誕生日/.test(normalizedText)) {
         return "R23";
     }
 
@@ -791,6 +794,13 @@ async function printDiaryBook() {
         button.disabled = true;
     }
 
+    // PDF保存時の初期ファイル名は、多くのブラウザでページのタイトルになる。
+    // 印刷の間だけ日付つきのタイトルにし、終わったら元に戻す。
+    const originalTitle = document.title;
+    const restoreTitle = () => {
+        document.title = originalTitle;
+    };
+
     try {
         if (!Object.keys(rabbitActions).length) {
             const actions = await loadActions();
@@ -826,9 +836,15 @@ async function printDiaryBook() {
             await document.fonts.ready;
         }
 
+        document.title = `癒しウサギの日記帳_${getTodayDate()}`;
+        window.addEventListener("afterprint", restoreTitle, { once: true });
+        // afterprint が届かないブラウザに備え、一定時間後にも元に戻す。
+        window.setTimeout(restoreTitle, 60000);
+
         // ブラウザの印刷画面から「PDFとして保存」またはプリンターを選べる。
         window.print();
     } catch (error) {
+        restoreTitle();
         console.error("日記帳の印刷準備に失敗しました:", error);
         alert("日記帳の印刷準備に失敗しました。もう一度お試しください。");
     } finally {
